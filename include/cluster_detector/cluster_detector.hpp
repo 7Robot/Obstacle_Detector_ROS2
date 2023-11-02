@@ -17,6 +17,7 @@
 #define NB_POINT_SCAN 1600
 #define NB_MEDIAN 2
 #define DIST_CLUSTER 0.2
+#define PI 3.141592653589793
 
 struct PolarPoint {
     float r;

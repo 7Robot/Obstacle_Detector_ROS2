@@ -115,7 +115,7 @@ void ClusterDetector::create_message(){
         }
     }
     
-    int radius;
+    float radius;
     float r, theta;
 
     // Solve the problem of a first cluster shared between the end and the beginning of the scan 
@@ -133,12 +133,13 @@ void ClusterDetector::create_message(){
         size = buffer_cluster[i].size();
         theta = 0;
         for (j = 0; j<size; j++){
-            r = std::max(r,buffer_cluster[i].at(j).r);
-            theta += buffer_cluster[i].at(j).angle;
+            r = std::max(r,buffer_cluster.at(i).at(j).r);
+            
+            theta += buffer_cluster.at(i).at(j).angle;
         }
-        theta *= 6.283185307179586/(NB_POINT_SCAN * size);
-        r /= 1000;
-        radius = 2 * sin(size/(2*NB_POINT_SCAN)) * r;
+        // The angle to the center is the mean of all measured angles
+        theta *= 2 * PI/(NB_POINT_SCAN * size);
+        radius = 2 * sin(2 * PI *static_cast<double>(size)/(2*NB_POINT_SCAN)) * r;
         
         cdf_msgs::msg::CircleObstacle tmp_circle;
         tmp_circle.radius = radius;
