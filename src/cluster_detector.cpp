@@ -105,13 +105,13 @@ void ClusterDetector::clusterize(){
 }
 
 void ClusterDetector::create_message(){
-    std::vector<PolarPoint>* buffer_cluster = new std::vector<PolarPoint> [this->nb_cluster+1];
+    std::vector<std::vector<PolarPoint>> buffer_cluster(this->nb_cluster+1);
     
     int i,j,size;
 
     for (i = 0; i<NB_POINT_SCAN; i++){
         if (this->points[i].cluster_id != -1){
-            buffer_cluster[this->points[i].cluster_id].push_back(this->points[i]);
+            (buffer_cluster.at(this->points[i].cluster_id)).push_back(this->points[i]);
         }
     }
     
@@ -120,9 +120,10 @@ void ClusterDetector::create_message(){
 
     // Solve the problem of a first cluster shared between the end and the beginning of the scan 
     if (this->nb_cluster>=0 && this->points[NB_POINT_SCAN-1].cluster_id == 0){
-        i = buffer_cluster[0].size() - 1;
-        while (buffer_cluster[0][i].cluster_id == 0) {
-            buffer_cluster[0][i].angle -= NB_POINT_SCAN;
+        i = buffer_cluster.front().size() - 1;
+        // We transform angle near 2pi in negative angle
+        while (buffer_cluster.front().at(i).angle > NB_POINT_SCAN) {
+            buffer_cluster.front().at(i).angle -= NB_POINT_SCAN;
             i--;
         }
     }
