@@ -4,6 +4,7 @@ using std::placeholders::_1;
 
 ClusterDetector::ClusterDetector() : Node("cluster_detector"){
     this->scan_sub = this->create_subscription<sensor_msgs::msg::LaserScan>("scan",1000,std::bind(&ClusterDetector::scan_callback, this, _1));
+    this->obstacle_pub = this->create_publisher<cdf_msgs::msg::Obstacles>("raw_obstacles",1000);
 }
 
 ClusterDetector::~ClusterDetector(){
@@ -145,11 +146,10 @@ void ClusterDetector::create_message(){
             
         this->buffer_message.circles.push_back(tmp_circle);
     }
-    delete[] buffer_cluster;
 }
 
 void ClusterDetector::publish_obstacle(){
-    this->obstacle_pub->publish(buffer_message);
+    this->obstacle_pub->publish(this->buffer_message);
     buffer_message.circles.clear();
 }
 
