@@ -109,6 +109,7 @@ void ClusterDetector::create_message(){
     
     int i,j,size;
 
+    // Sort every point by its cluster_id
     for (i = 0; i<NB_POINT_SCAN; i++){
         if (this->points[i].cluster_id != -1){
             (buffer_cluster.at(this->points[i].cluster_id)).push_back(this->points[i]);
@@ -132,6 +133,7 @@ void ClusterDetector::create_message(){
         r = 0;
         size = buffer_cluster[i].size();
         theta = 0;
+        // Get the furthest point and consider it to be the center of the circle
         for (j = 0; j<size; j++){
             r = std::max(r,buffer_cluster.at(i).at(j).r);
             
@@ -141,6 +143,7 @@ void ClusterDetector::create_message(){
         theta *= 2 * PI/(NB_POINT_SCAN * size);
         radius = 2 * sin(2 * PI *static_cast<double>(size)/(2*NB_POINT_SCAN)) * r;
         
+        // Place the measured parameters in the message
         cdf_msgs::msg::CircleObstacle tmp_circle;
         tmp_circle.radius = radius;
         tmp_circle.center.x = r*cos(theta);
