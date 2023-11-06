@@ -5,6 +5,7 @@ using std::placeholders::_1;
 ClusterDetector::ClusterDetector() : Node("cluster_detector"){
     this->scan_sub = this->create_subscription<sensor_msgs::msg::LaserScan>("scan",1000,std::bind(&ClusterDetector::scan_callback, this, _1));
     this->obstacle_pub = this->create_publisher<cdf_msgs::msg::Obstacles>("raw_obstacles",1000);
+    this->marker_pub = this->create_publisher<visualization_msgs::msg::MarkerArray>("markers",1000);
 }
 
 ClusterDetector::~ClusterDetector(){
@@ -53,6 +54,7 @@ void ClusterDetector::scan_callback(const sensor_msgs::msg::LaserScan msg){
     
     create_message();
     
+    publish_marker();
     publish_obstacle();
 }
 
@@ -156,6 +158,42 @@ void ClusterDetector::create_message(){
 void ClusterDetector::publish_obstacle(){
     this->obstacle_pub->publish(this->buffer_message);
     buffer_message.circles.clear();
+}
+
+void ClusterDetector::publish_marker(){
+    visualization_msgs::msg::MarkerArray markers;
+    visualization_msgs::msg::MarkerArray flush;
+    visualization_msgs::msg::Marker tmp;
+    int i, prev_size;
+    prev_size = this->nb_marker;
+
+    this->nb_marker = this->buffer_message.circles.size();
+
+    for (i = 0; i<this->nb_marker; i++){
+        tmp.header.frame_id = "laser";
+        tmp.action = visualization_msgs::msg::Marker::ADD;
+        tmp.type = visualization_msgs::msg::Marker::SPHERE;
+        tmp.id = i;
+        tmp.scale.x = 0.1;
+        tmp.scale.y = 0.1;
+        tmp.scale.z = 0.1;
+        tmp.color.a = 1;
+        tmp.color.r = 0;
+        tmp.color.g = 1;
+        tmp.color.b = 0;
+        tmp.pose.position.x = this->buffer_message.circles.at(i).center.x;
+        tmp.pose.position.y = this->buffer_message.circles.at(i).center.y;
+        tmp.pose.position.z = this->buffer_message.circles.at(i).center.z;
+        markers.markers.push_back(tmp);
+    }
+    for (i = this->nb_marker; i<prev_size; i++){
+        tmp.id = i;
+        tmp.action = visualization_msgs::msg::Marker::DELETE;
+        markers.markers.push_back(tmp);
+    }
+
+    this->marker_pub->publish(markers);
+
 }
 
 int main(int argc, char * argv[]){
