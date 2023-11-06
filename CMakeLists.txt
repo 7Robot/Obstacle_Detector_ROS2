@@ -11,6 +11,7 @@ find_package(rclcpp REQUIRED)
 find_package(sensor_msgs REQUIRED)
 find_package(geometry_msgs REQUIRED)
 find_package(cdf_msgs REQUIRED)
+find_package(visualization_msgs REQUIRED)
 # uncomment the following section in order to fill in
 # further dependencies manually.
 # find_package(<dependency> REQUIRED)
@@ -25,7 +26,7 @@ install(TARGETS
         cluster_detector
         DESTINATION lib/${PROJECT_NAME})
 
-ament_target_dependencies(cluster_detector rclcpp sensor_msgs cdf_msgs)
+ament_target_dependencies(cluster_detector rclcpp sensor_msgs cdf_msgs visualization_msgs)
 
 if(BUILD_TESTING)
   find_package(ament_lint_auto REQUIRED)
