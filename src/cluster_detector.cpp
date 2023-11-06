@@ -18,7 +18,7 @@ void ClusterDetector::scan_callback(const sensor_msgs::msg::LaserScan msg){
     	return;
     } 
     
-    int val_list[2*NB_MEDIAN+1];
+    float val_list[2*NB_MEDIAN+1];
     int i,add, access_index, buffer_index;
     float buffer_val;
     for (i = 0; i<NB_POINT_SCAN; i++){this->points[i].cluster_id=-1;}
@@ -29,7 +29,7 @@ void ClusterDetector::scan_callback(const sensor_msgs::msg::LaserScan msg){
         for (add = -NB_MEDIAN; add <= NB_MEDIAN; add++){
             access_index = i + add;
 	    if (access_index < 0){access_index+=NB_POINT_SCAN;}
-	    if (access_index >= NB_POINT_SCAN){access_index-=NB_POINT_SCAN;}
+            else if (access_index >= NB_POINT_SCAN){access_index-=NB_POINT_SCAN;}
 	    val_list[NB_MEDIAN+add] = (msg.ranges[access_index] < 10) ? msg.ranges[access_index] : 30;
 	}
 
