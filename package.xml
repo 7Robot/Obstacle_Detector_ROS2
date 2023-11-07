@@ -3,9 +3,9 @@
 <package format="3">
   <name>cluster_detector</name>
   <version>0.0.0</version>
-  <description>TODO: Package description</description>
+  <description>Find circle in a Lidar scan</description>
   <maintainer email="thomas.bonnefille@outlook.com">thomas</maintainer>
-  <license>TODO: License declaration</license>
+  <license>GNU/GPL v3</license>
 
   <buildtool_depend>ament_cmake</buildtool_depend>
 
