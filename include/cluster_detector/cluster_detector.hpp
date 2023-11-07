@@ -23,9 +23,10 @@
 #define PI 3.141592653589793
 
 struct PolarPoint {
-    float r;
-    int angle;
-    int cluster_id = -1;
+    // A structure representing a point in polar coordinate
+    float r; // The distance to the point in meters
+    int angle; // The angle expressed with this formula : angle/NB_POINT_SCAN = angle_rad/2PI
+    int cluster_id = -1; // Identifier of the cluster this point belong to, -1 if this point is not in a cluster
 };
 
 class ClusterDetector : public rclcpp::Node{
@@ -40,8 +41,8 @@ private:
     
     int nb_cluster;
 
-    PolarPoint points[NB_POINT_SCAN];
-    cdf_msgs::msg::Obstacles buffer_message;
+    PolarPoint points[NB_POINT_SCAN]; //List of points gathered from the scan_sub
+    cdf_msgs::msg::Obstacles buffer_message; //Message sent through obstacle_pub
 
     rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr scan_sub;
     rclcpp::Publisher<cdf_msgs::msg::Obstacles>::SharedPtr obstacle_pub;
