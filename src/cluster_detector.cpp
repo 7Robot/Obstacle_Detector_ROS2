@@ -70,7 +70,7 @@ void ClusterDetector::clusterize(){
     this->nb_cluster = -1;
     bool in_cluster = false;
     bool back_needed = false;
-    if (this->points[0].r < 10000){
+    if (this->points[0].r < 10){
         in_cluster = true;
         back_needed = true;
         this->nb_cluster++;
