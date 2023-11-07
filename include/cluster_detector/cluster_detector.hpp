@@ -37,16 +37,18 @@ private:
     void clusterize();
     void create_message();
     void publish_obstacle();
-    void publish_marker();
     
     int nb_cluster;
-    int nb_marker = 0;
 
     PolarPoint points[NB_POINT_SCAN];
     cdf_msgs::msg::Obstacles buffer_message;
 
     rclcpp::Subscription<sensor_msgs::msg::LaserScan>::SharedPtr scan_sub;
     rclcpp::Publisher<cdf_msgs::msg::Obstacles>::SharedPtr obstacle_pub;
+
+    // Variables linked to markers
+    int nb_marker = 0;
+    void publish_marker();
     rclcpp::Publisher<visualization_msgs::msg::MarkerArray>::SharedPtr marker_pub;
 };
 
