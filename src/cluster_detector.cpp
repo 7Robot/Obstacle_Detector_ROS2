@@ -64,11 +64,16 @@ void ClusterDetector::clusterize(){
     /*
      * Create cluster of point in the array.
      * if a point do not belong in any cluster
-     * the cluster_id will be -1
+     * the cluster_id will be -1.
+     * This fuction assign a cluster_id to all 
+     * PolarPoint in class variable points
      * */
 
     this->nb_cluster = -1;
     bool in_cluster = false;
+    
+    // Verify if there is a cluster at the beginning of the scan and therefore
+    // if we need to browse the scan backward from the end
     bool back_needed = false;
     if (this->points[0].r < 10){
         in_cluster = true;
@@ -107,6 +112,11 @@ void ClusterDetector::clusterize(){
 }
 
 void ClusterDetector::create_message(){
+    /*
+     * Store the calculated clusters in a message
+     * of type cdf_msgs::msg::Obstacles.
+     * */
+
     std::vector<std::vector<PolarPoint>> buffer_cluster(this->nb_cluster+1);
     
     int i,j,size;
@@ -193,7 +203,6 @@ void ClusterDetector::publish_marker(){
     }
 
     this->marker_pub->publish(markers);
-
 }
 
 int main(int argc, char * argv[]){
