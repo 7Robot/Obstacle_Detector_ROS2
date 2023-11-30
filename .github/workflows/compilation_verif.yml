@@ -20,7 +20,7 @@ jobs:
       - name: Compile...  
         run: |
           REPO_NAME=$(ls ..)
-          source /opt/ros/humble/setup.sh 
+          source /opt/ros/iron/setup.sh 
           cd ../../ROS2_test_dir/
           colcon build --packages-up-to $REPO_NAME && \
           rm -rf ../ROS2_staged_dir/src && \
